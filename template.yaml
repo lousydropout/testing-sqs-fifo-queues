@@ -39,10 +39,24 @@ Resources:
           table: !Ref DynamoDB
       CodeUri: .
       Handler: handler.lambda_handler
+      Events:
+        FIFOQueue:
+          Type: SQS
+          Properties:
+            Enabled: true
+            Queue: !GetAtt FIFOQueue.Arn
+        StdQueue:
+          Type: SQS
+          Properties:
+            Enabled: true
+            Queue: !GetAtt StdQueue.Arn
       Description: write records to DynamoDB table
       Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref DynamoDB
+        - Statement:
+          - Sid: DynamoDBPartiQLWritePolicy
+            Effect: Allow
+            Action: dynamodb:PartiQLInsert
+            Resource: !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDB}
         - SQSPollerPolicy:
             QueueName: !GetAtt StdQueue.QueueName
         - SQSPollerPolicy:
