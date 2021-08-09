@@ -30,3 +30,20 @@ Resources:
         - AttributeName: sk
           KeyType: RANGE
 
+  WriteToDDBLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${Name}-handler
+      Environment:
+        Variables:
+          table: !Ref DynamoDB
+      CodeUri: .
+      Handler: handler.lambda_handler
+      Description: write records to DynamoDB table
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref DynamoDB
+    Metadata:
+      BuildMethod: makefile
+
+
