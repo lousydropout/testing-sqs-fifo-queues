@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STACK_NAME=sqs-fifo-test
+STACK_NAME=test-sqs-fifo-queues
 S3_BUCKET=vincent-cloudformation-artifacts
 REGION=us-west-2
 PROFILE=cloud

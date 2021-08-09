@@ -6,9 +6,10 @@ import boto3
 
 sqs = boto3.client("sqs")
 num_groups = 7
+num_iter = 10
 
 
-def create_entry(i: int, j: int) -> dict:
+def create_entry(i: int, j: int, is_fifo: bool) -> dict:
     group_id = str(j % num_groups)
     body = {
         "sk": group_id,
@@ -20,22 +21,24 @@ def create_entry(i: int, j: int) -> dict:
         "MessageBody": json.dumps(body),
     }
 
-    if j == -1:  # then it's for standard queue
+    if not is_fifo:  # then it's for standard queue
         return result
 
     # else, it's for FIFO queue
     return {
         **result,
         "MessageGroupId": group_id,
-        "MessageDuplicationId": str(uuid()),
+        "MessageDeduplicationId": str(uuid()),
     }
 
 
 def send_messages(queue: str, is_fifo: bool) -> None:
-    for j in range(100):
-        __ = sqs.batch_send_message(
+    for j in range(num_iter):
+        __ = sqs.send_message_batch(
             QueueUrl=queue,
-            Entries=[create_entry(i, j if is_fifo else -1) for i in range(10)],
+            Entries=[
+                create_entry(i, j * num_iter + i, is_fifo) for i in range(10)
+            ],
         )
 
 

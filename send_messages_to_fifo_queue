@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aws lambda invoke --function-name sqs-test-send-messages-to-fifo-queue out.txt --profile cloud --region us-west-2
