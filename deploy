@@ -1,0 +1,16 @@
+#!/bin/bash
+
+STACK_NAME=sqs-fifo-test
+S3_BUCKET=vincent-cloudformation-artifacts
+REGION=us-west-2
+PROFILE=cloud
+
+sam build
+
+sam deploy \
+    --profile $PROFILE \
+    --stack-name $STACK_NAME \
+    --s3-bucket $S3_BUCKET \
+    --region $REGION \
+    --confirm-changeset \
+    --capabilities CAPABILITY_IAM
