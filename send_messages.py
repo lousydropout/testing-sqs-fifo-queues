@@ -34,7 +34,7 @@ def create_entry(i: int, j: int, is_fifo: bool) -> dict:
 
 def send_messages(queue: str, is_fifo: bool) -> None:
     for j in range(num_iter):
-        __ = sqs.send_message_batch(
+        _ = sqs.send_message_batch(
             QueueUrl=queue,
             Entries=[
                 create_entry(i, j * num_iter + i, is_fifo) for i in range(10)
