@@ -79,3 +79,14 @@ Resources:
             TableName: !Ref DynamoDB
     Metadata:
       BuildMethod: makefile
+
+  StdQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${Name}-sqs-std-queue
+
+  FIFOQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      FifoQueue: true
+      QueueName: !Sub ${Name}-sqs-fifo-queue.fifo
