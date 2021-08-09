@@ -50,37 +50,35 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-
-
-  SendMessagesToFIFOQueue:
+  SendMessagesToFIFOQueueLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${Name}-send-messages-to-fifo-queue
       Environment:
         Variables:
-          table: !Ref DynamoDB
+          fifo_queue: !Ref FIFOQueue
       CodeUri: .
       Handler: send_messages.send_to_fifo_queue
       Description: Send messages to SQS FIFO queue
       Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref DynamoDB
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt FIFOQueue.QueueName
     Metadata:
       BuildMethod: makefile
 
-  SendMessagesToStdQueue:
+  SendMessagesToStdQueueLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${Name}-send-messages-to-std-queue
       Environment:
         Variables:
-          table: !Ref DynamoDB
+          std_queue: !Ref StdQueue
       CodeUri: .
       Handler: send_messages.send_to_std_queue
       Description: Send messages to SQS standard queue
       Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref DynamoDB
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt StdQueue.QueueName
     Metadata:
       BuildMethod: makefile
 

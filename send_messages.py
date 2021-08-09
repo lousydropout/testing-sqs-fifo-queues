@@ -44,4 +44,4 @@ def send_to_fifo_queue(event: dict, context) -> None:
 
 
 def send_to_std_queue(event: dict, context) -> None:
-    send_messages(queue=os.environ["fifo_queue"], is_fifo=False)
+    send_messages(queue=os.environ["std_queue"], is_fifo=False)

@@ -1,8 +1,8 @@
 build-WriteToDDBLambda:
 	cp handler.py ${ARTIFACTS_DIR}/
 
-build-SendMessagesToFIFOQueue:
+build-SendMessagesToFIFOQueueLambda:
 	cp send_messages.py ${ARTIFACTS_DIR}/
 
-build-SendMessagesToStdQueue:
+build-SendMessagesToStdQueueLambda:
 	cp send_messages.py ${ARTIFACTS_DIR}/
