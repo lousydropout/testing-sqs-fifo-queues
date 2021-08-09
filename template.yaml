@@ -47,3 +47,35 @@ Resources:
       BuildMethod: makefile
 
 
+
+  SendMessagesToFIFOQueue:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${Name}-send-messages-to-fifo-queue
+      Environment:
+        Variables:
+          table: !Ref DynamoDB
+      CodeUri: .
+      Handler: send_messages.send_to_fifo_queue
+      Description: Send messages to SQS FIFO queue
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref DynamoDB
+    Metadata:
+      BuildMethod: makefile
+
+  SendMessagesToStdQueue:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${Name}-send-messages-to-std-queue
+      Environment:
+        Variables:
+          table: !Ref DynamoDB
+      CodeUri: .
+      Handler: send_messages.send_to_std_queue
+      Description: Send messages to SQS standard queue
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref DynamoDB
+    Metadata:
+      BuildMethod: makefile
