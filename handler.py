@@ -15,10 +15,10 @@ def format_data(record: dict) -> dict:
     # partition key:
     # add prefix "fifo#" to partition key if message is from FIFO queue
     # else add prefix "std#"
-    if record["attributes"].get("MessageGroupId", ""):
+    if record["attributes"].get("MessageGroupId"):
         pk = f'fifo#{record["attributes"]["MessageGroupId"]}'
     else:
-        pk = f'std#{body["groupId"]}'
+        pk = f'std#{body["sk"]}'
 
     return {
         "pk": pk,
@@ -30,14 +30,14 @@ def format_data(record: dict) -> dict:
 def execute_statement(record: dict) -> None:
     """Execute PartiQL INSERT statement based on."""
     try:
-        client.execute_statement(
+        _ = client.execute_statement(
             Statement=insert_statement.format(
                 table=os.environ["table"],
                 data=format_data(record),
             )
         )
-    except ClientError:
-        pass
+    except ClientError as err:
+        print(err)
 
 
 def lambda_handler(event: dict, context) -> None:
