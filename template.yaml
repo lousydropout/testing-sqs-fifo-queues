@@ -37,7 +37,7 @@ Resources:
       Environment:
         Variables:
           table: !Ref DynamoDB
-      CodeUri: .
+      CodeUri: src
       Handler: handler.lambda_handler
       Events:
         FIFOQueue:
@@ -61,8 +61,6 @@ Resources:
             QueueName: !GetAtt StdQueue.QueueName
         - SQSPollerPolicy:
             QueueName: !GetAtt FIFOQueue.QueueName
-    Metadata:
-      BuildMethod: makefile
 
   SendMessagesToFIFOQueueLambda:
     Type: AWS::Serverless::Function
@@ -71,14 +69,12 @@ Resources:
       Environment:
         Variables:
           fifo_queue: !Ref FIFOQueue
-      CodeUri: .
+      CodeUri: src
       Handler: send_messages.send_to_fifo_queue
       Description: Send messages to SQS FIFO queue
       Policies:
         - SQSSendMessagePolicy:
             QueueName: !GetAtt FIFOQueue.QueueName
-    Metadata:
-      BuildMethod: makefile
 
   SendMessagesToStdQueueLambda:
     Type: AWS::Serverless::Function
@@ -87,14 +83,12 @@ Resources:
       Environment:
         Variables:
           std_queue: !Ref StdQueue
-      CodeUri: .
+      CodeUri: src
       Handler: send_messages.send_to_std_queue
       Description: Send messages to SQS standard queue
       Policies:
         - SQSSendMessagePolicy:
             QueueName: !GetAtt StdQueue.QueueName
-    Metadata:
-      BuildMethod: makefile
 
   StdQueue:
     Type: AWS::SQS::Queue

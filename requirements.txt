@@ -1,1 +1,5 @@
 boto3
+aws_cdk.core==1.118.0
+aws_cdk.aws_s3==1.118.0
+aws_cdk.aws_lambda==1.118.0
+aws_cdk.aws_lambda_event_sources==1.118.0
